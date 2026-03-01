@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.pyc
+projects/*/
+!projects/_example/
+
