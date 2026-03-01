@@ -14,7 +14,7 @@ Read:
 - `projects/{project}/requirements.md`
 - `projects/{project}/glossary.md`
 - `projects/{project}/stakeholders.md`
-- `templates/srs.md` for structure reference
+- `templates/en/srs.md` (or `templates/uk/srs.md` for Ukrainian projects) for structure reference
 
 ## Step 2: Determine scope
 

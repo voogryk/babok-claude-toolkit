@@ -1,41 +1,43 @@
-# BA Brain -- Business Analysis Toolkit for Claude Code
+# BABOK Claude Toolkit
 
-BA-асистент на базі **BABOK v3** та практик **Karl Wiegers** з requirements engineering.
+> Business Analysis toolkit for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) based on **BABOK v3** and **Karl Wiegers' requirements engineering** practices.
 
-Працює як окремий проект для Claude Code. Відкриваєш папку `ba-brain/` в Claude Code -- і маєш повноцінного BA-помічника зі скілами, темплейтами та конвертером документів.
+[Українська версія](README.uk.md)
 
-## Швидкий старт
+Open this folder in Claude Code and get a full BA assistant with structured skills, templates, and a document converter — all grounded in industry-standard methodology.
+
+## Quick Start
 
 ```bash
-# Відкрити в Claude Code
-cd ~/endgame/ba-brain
+# Open in Claude Code
+cd babok-claude-toolkit
 claude
 
-# Створити новий проект
+# Define a new project
 /scope my-project
 
-# Імпортувати документи
+# Import existing documents
 /import /path/to/requirements.pdf my-project
 
-# Витягти вимоги з документу
+# Extract requirements from imported docs
 /elicit my-project document-analysis
 
-# Написати user story
-/user-story my-project "Користувач хоче змінити пароль"
+# Create a user story
+/user-story my-project "User wants to reset their password"
 ```
 
-## Що всередині
+## What's Inside
 
-### Структура
+### Structure
 
 ```
-ba-brain/
-├── CLAUDE.md                          # Системний промпт (роль, правила, поведінка)
-├── convert.py                         # Конвертер документів -> Markdown
+babok-claude-toolkit/
+├── CLAUDE.md                          # System prompt (role, rules, behavior)
+├── convert.py                         # Document converter → Markdown
 ├── .claude/
 │   ├── rules/
-│   │   └── babok.md                   # BABOK v3 + Wiegers довідник (авто-завантаження)
-│   └── skills/                        # 8 скілів (slash-команди)
+│   │   └── babok.md                   # BABOK v3 + Wiegers reference (auto-loaded)
+│   └── skills/                        # 8 skills (slash commands)
 │       ├── scope/SKILL.md
 │       ├── import/SKILL.md
 │       ├── elicit/SKILL.md
@@ -44,121 +46,125 @@ ba-brain/
 │       ├── user-story/SKILL.md
 │       ├── validate/SKILL.md
 │       └── glossary/SKILL.md
-├── templates/                         # 5 темплейтів
-│   ├── srs.md
-│   ├── user-story.md
-│   ├── use-case.md
-│   ├── stakeholder-register.md
-│   └── requirements-checklist.md
-└── projects/                          # Робочі проекти
-    └── _example/                      # Приклад структури
+├── templates/
+│   ├── en/                            # English templates
+│   │   ├── srs.md
+│   │   ├── user-story.md
+│   │   ├── use-case.md
+│   │   ├── stakeholder-register.md
+│   │   └── requirements-checklist.md
+│   └── uk/                            # Ukrainian templates
+│       ├── srs.md
+│       ├── user-story.md
+│       ├── use-case.md
+│       ├── stakeholder-register.md
+│       └── requirements-checklist.md
+└── projects/                          # Your project work goes here
+    └── _example/                      # Example project structure
 ```
 
-### Проектна структура
+### Per-Project Structure
 
-Кожен проект живе в `projects/{project-name}/`:
+Each project lives in `projects/{project-name}/`:
 
 ```
 projects/my-project/
-├── requirements.md      # Всі вимоги з ID, пріоритетами, статусами
-├── glossary.md           # Глосарій доменних термінів
-├── stakeholders.md       # Реєстр стейкхолдерів
-├── decisions.md          # Лог важливих рішень
-├── sources/              # Імпортовані документи (Markdown)
-├── use-cases/            # Детальні use case файли
-└── archive/              # Завершені/застарілі елементи
+├── requirements.md      # All requirements with IDs, priorities, statuses
+├── glossary.md           # Domain terms and definitions
+├── stakeholders.md       # Stakeholder register
+├── decisions.md          # Key decisions and rationale
+├── sources/              # Imported documents (converted to Markdown)
+├── use-cases/            # Detailed use case files
+└── archive/              # Completed/deprecated items
 ```
 
 ---
 
-## Скіли (slash-команди)
+## Skills
 
-Скіли побудовані відповідно до BABOK workflow -- від визначення скоупу до валідації.
+Skills follow the BABOK workflow — from scope definition through validation.
 
-### `/scope` -- Визначення скоупу
+### `/scope` — Scope Definition
 
-Стартова точка для нового проекту. Послідовно запитує:
+Starting point for any new project. Asks sequentially:
 
-1. **Проблема** -- що зламано або чого не вистачає
-2. **Бізнес-цілі** -- як вимірюємо успіх
-3. **Стейкхолдери** -- хто приймає рішення, хто користувачі
-4. **Межі скоупу** -- що IN scope, що OUT of scope
-5. **Обмеження** -- технічні, бюджетні, часові
-6. **Припущення** -- що вважаємо істинним
-7. **Ризики** -- що може піти не так
+1. **Problem statement** — what's broken or missing
+2. **Business objectives** — how we measure success
+3. **Stakeholders** — decision makers, users, technical team
+4. **Scope boundaries** — what's IN, what's OUT
+5. **Constraints** — technical, budget, timeline
+6. **Assumptions** — what we're taking as true
+7. **Risks** — what could go wrong
 
-Результат: заповнені `stakeholders.md`, `requirements.md` (бізнес-вимоги), `glossary.md`.
+**Output**: populated `stakeholders.md`, `requirements.md` (business requirements), `glossary.md`.
 
-### `/import` -- Імпорт документів
+### `/import` — Document Import
 
-Конвертує PDF, DOCX, DOC, XLSX, XLS файли в Markdown та зберігає в `sources/`.
+Converts PDF, DOCX, DOC, XLSX, XLS files to Markdown and saves them to `sources/`.
 
 ```bash
-# Один файл
 /import /path/to/spec.pdf my-project
-
-# Декілька файлів (glob)
 /import "/path/to/docs/*.pdf" my-project
 ```
 
-Що відбувається:
-1. Перевіряє що файл існує
-2. Конвертує через `convert.py`
-3. Зберігає в `projects/{project}/sources/{filename}.md` з метаданими
-4. Показує summary (кількість заголовків, таблиць)
-5. Пропонує запустити `/elicit` для аналізу
+What happens:
+1. Verifies file exists
+2. Converts via `convert.py`
+3. Saves to `projects/{project}/sources/{filename}.md` with metadata header
+4. Shows summary (headings count, tables count)
+5. Suggests running `/elicit` for analysis
 
-**Авто-детекція**: якщо надати Claude шлях до файлу з розширенням `.pdf`, `.docx`, `.doc`, `.xlsx` або `.xls` -- він автоматично запропонує `/import`.
+**Auto-detection**: if you give Claude a file path ending in `.pdf`, `.docx`, `.doc`, `.xlsx`, or `.xls`, it will automatically suggest `/import`.
 
-### `/elicit` -- Збір вимог
+### `/elicit` — Requirements Elicitation
 
-Структурована сесія збору вимог. Підтримує 4 техніки:
+Structured requirements gathering session. Supports 4 techniques:
 
-| Техніка | Коли використовувати |
-|---------|---------------------|
-| **Interview** | 1-на-1 розмова зі стейкхолдером/SME |
-| **Brainstorm** | Генерація ідей, дослідження простору рішень |
-| **Document analysis** | Аналіз існуючих документів (після `/import`) |
-| **Meeting notes** | Структуризація нотаток з мітингу |
+| Technique | When to use |
+|-----------|-------------|
+| **Interview** | 1-on-1 conversation with a stakeholder/SME |
+| **Brainstorm** | Idea generation, exploring the solution space |
+| **Document analysis** | Analyzing existing documents (after `/import`) |
+| **Meeting notes** | Structuring meeting notes into requirements |
 
-Для кожної виявленої вимоги:
-- Присвоює ID (`REQ-F-001`, `REQ-NF-003` тощо)
-- Формулює в стилі "The system shall..."
-- Перевіряє на неоднозначність (challenge ambiguity)
-- Визначає джерело та пріоритет
-- Вказує на gap'и -- що не обговорили, але варто
+For each discovered requirement:
+- Assigns an ID (`REQ-F-001`, `REQ-NF-003`, etc.)
+- Formulates in "The system shall..." style
+- Challenges ambiguity (vague terms flagged)
+- Identifies source and suggests priority
+- Points out gaps — what wasn't discussed but should be
 
-### `/analyze` -- Аналіз вимог
+### `/analyze` — Requirements Analysis
 
-Структурує та моделює вимоги після збору:
+Structures and models requirements after gathering:
 
-1. **Декомпозиція** -- розбиває складні вимоги на атомарні
-2. **Категоризація** -- Business / User / Functional / Non-Functional / Constraint / Interface
-3. **Маппінг залежностей** -- що блокує що, що можна робити паралельно
-4. **Пріоритизація** -- MoSCoW (Must / Should / Could / Won't)
-5. **Gap analysis** -- перевірка на прогалини:
-   - Обробка помилок
-   - Автентифікація/авторизація
-   - Валідація даних
-   - Продуктивність
-   - Безпека
-   - Міграція даних
-   - Звітність
+1. **Decomposition** — breaks complex requirements into atomic ones
+2. **Categorization** — Business / User / Functional / Non-Functional / Constraint / Interface
+3. **Dependency mapping** — what blocks what, what can be done in parallel
+4. **Prioritization** — MoSCoW (Must / Should / Could / Won't)
+5. **Gap analysis** — checks for:
+   - Error handling
+   - Authentication/authorization
+   - Data validation
+   - Performance
+   - Security
+   - Data migration
+   - Reporting
 
-### `/specify` -- Формальна специфікація
+### `/specify` — Formal Specification
 
-Пише формальні специфікації у стилі Wiegers SRS:
+Writes formal specs in Wiegers SRS style:
 
-- **Функціональні вимоги** -- "The system shall..." з error conditions
-- **Нефункціональні вимоги** -- з вимірюваними критеріями (мс, %, кількість)
-- **Use cases** -- Actor/System таблиця з main flow, alternative flows, exception flows
-- **Крос-референс** -- трасування від бізнес до функціональних вимог
+- **Functional requirements** — "The system shall..." with error conditions
+- **Non-functional requirements** — with measurable criteria (ms, %, count)
+- **Use cases** — Actor/System table with main, alternative, and exception flows
+- **Cross-references** — traceability from business to functional requirements
 
-Використовує темплейт `templates/srs.md` як основу.
+Uses `templates/{lang}/srs.md` as a base.
 
-### `/user-story` -- User Stories
+### `/user-story` — User Stories
 
-Швидке створення user stories з acceptance criteria:
+Quick user story creation with acceptance criteria:
 
 ```
 As a [specific role],
@@ -169,160 +175,165 @@ Acceptance Criteria:
 1. Given [context], when [action], then [result]
 ```
 
-Перевіряє кожну story за **INVEST** критеріями:
-- **I**ndependent -- можна розробляти окремо
-- **N**egotiable -- деталі можна обговорити
-- **V**aluable -- приносить цінність
-- **E**stimable -- команда може оцінити
-- **S**mall -- вміщується в один спринт
-- **T**estable -- є чіткі acceptance criteria
+Checks every story against **INVEST** criteria:
+- **I**ndependent — can be developed separately
+- **N**egotiable — details open for discussion
+- **V**aluable — delivers value to user or business
+- **E**stimable — team can estimate effort
+- **S**mall — fits in one sprint
+- **T**estable — has clear acceptance criteria
 
-Також проактивно додає edge cases (невалідний ввід, скасування, навантаження, права доступу).
+Proactively adds edge cases (invalid input, cancellation, load, permissions).
 
-### `/validate` -- Валідація вимог
+### `/validate` — Requirements Validation
 
-Quality gate перед передачею в розробку. Перевіряє за чеклістом Wiegers:
+Quality gate before development handoff. Checks against Wiegers checklist:
 
-**Для кожної вимоги:**
-- Completeness -- нічого не пропущено?
-- Correctness -- фактично вірно?
-- Feasibility -- технічно можливо?
-- Necessity -- є бізнес-потреба?
-- Unambiguity -- тільки одна інтерпретація?
-- Verifiability -- можна написати тест?
-- Consistency -- немає суперечностей?
+**Per requirement:**
+- Completeness — nothing missing?
+- Correctness — factually accurate?
+- Feasibility — technically achievable?
+- Necessity — traces to business need?
+- Unambiguity — only one interpretation?
+- Verifiability — can write a test?
+- Consistency — no contradictions?
 
-**Для набору вимог:**
-- Повне покриття бізнес-вимог
-- Немає дублікатів
-- Немає конфліктів
-- Все має ID та пріоритет
+**For the requirement set:**
+- Full coverage of business requirements
+- No duplicates
+- No conflicts
+- Everything has an ID and priority
 
-**Шукає анти-патерни:**
-- Gold plating -- вимоги без бізнес-потреби
-- Рішення замість вимоги -- "Use PostgreSQL" замість "ACID compliance"
-- Складені вимоги -- декілька поведінок в одній вимозі
-- Нетестовані якості -- "System shall be reliable"
+**Flags anti-patterns:**
+- Gold plating — requirements without business need
+- Solution as requirement — "Use PostgreSQL" instead of "ACID compliance"
+- Compound requirements — multiple behaviors in one
+- Untestable qualities — "System shall be reliable"
 
-Генерує **Validation Report** з Critical/Warning/Suggestion issues.
+Generates a **Validation Report** with Critical/Warning/Suggestion issues.
 
-### `/glossary` -- Глосарій
+### `/glossary` — Glossary Management
 
-Управління доменним глосарієм:
-- Додає/оновлює терміни з визначенням та контекстом
-- Визначає синоніми (обирає канонічний термін)
-- Виявляє омоніми (одне слово -- різні значення)
-- Перевіряє `requirements.md` на неконсистентне використання термінів
-
----
-
-## Темплейти
-
-В папці `templates/` лежать 5 готових темплейтів:
-
-| Файл | Опис | На базі |
-|------|------|---------|
-| `srs.md` | Software Requirements Specification -- повна структура з 9 розділами + трасування | Wiegers SRS |
-| `user-story.md` | User story з acceptance criteria, INVEST чеклістом, edge cases | Agile + INVEST |
-| `use-case.md` | Use case з main/alternative/exception flows, postconditions | UML / Cockburn |
-| `stakeholder-register.md` | Реєстр стейкхолдерів з RACI матрицею | BABOK |
-| `requirements-checklist.md` | Чекліст якості вимог з анти-патернами та sign-off | Wiegers |
-
-Темплейти використовуються скілами автоматично. Можна також відкрити їх вручну як довідник.
+Domain glossary maintenance:
+- Adds/updates terms with definitions and context
+- Identifies synonyms (picks one canonical term)
+- Detects homonyms (same word, different meanings)
+- Scans `requirements.md` for inconsistent term usage
 
 ---
 
-## Конвертер документів
+## Templates
 
-`convert.py` -- скрипт для конвертації документів у Markdown.
+Templates are available in **English** (`templates/en/`) and **Ukrainian** (`templates/uk/`).
 
-### Підтримувані формати
+| File | Description | Based on |
+|------|-------------|----------|
+| `srs.md` | Software Requirements Specification — full structure with 9 sections + traceability | Wiegers SRS |
+| `user-story.md` | User story with acceptance criteria, INVEST checklist, edge cases | Agile + INVEST |
+| `use-case.md` | Use case with main/alternative/exception flows, postconditions | UML / Cockburn |
+| `stakeholder-register.md` | Stakeholder register with RACI matrix | BABOK |
+| `requirements-checklist.md` | Requirements quality checklist with anti-patterns and sign-off | Wiegers |
 
-| Формат | Бібліотека | Що зберігає |
-|--------|-----------|-------------|
-| PDF | `pymupdf4llm` | Заголовки, таблиці, списки, структура. Оптимізовано для LLM. |
-| DOCX | `mammoth` | Форматування, списки, таблиці. Показує warnings. |
-| DOC | `antiword` / `LibreOffice` | Через antiword (plain text) або LibreOffice -> DOCX -> mammoth. |
-| XLSX / XLS | `openpyxl` | Кожен sheet як окрема Markdown таблиця. |
+Skills use templates automatically. You can also open them manually as reference.
 
-### Використання
+---
+
+## Document Converter
+
+`convert.py` converts documents to Markdown for analysis.
+
+### Supported Formats
+
+| Format | Library | What it preserves |
+|--------|---------|-------------------|
+| PDF | `pymupdf4llm` | Headings, tables, lists, structure. LLM-optimized. |
+| DOCX | `mammoth` | Formatting, lists, tables. Shows conversion warnings. |
+| DOC | `antiword` / `LibreOffice` | Via antiword (plain text) or LibreOffice → DOCX → mammoth. |
+| XLSX / XLS | `openpyxl` | Each sheet as a separate Markdown table. |
+
+### Usage
 
 ```bash
-# Через venv
-cd ~/endgame/ba-brain
-.venv/bin/python convert.py input.pdf                  # Вивід в stdout
-.venv/bin/python convert.py input.pdf output.md        # Зберегти у файл
+cd babok-claude-toolkit
+.venv/bin/python convert.py input.pdf                  # Output to stdout
+.venv/bin/python convert.py input.pdf output.md        # Save to file
 ```
 
-### Встановлення залежностей
+### Installing Dependencies
 
 ```bash
-cd ~/endgame/ba-brain
+cd babok-claude-toolkit
 python3 -m venv .venv
 .venv/bin/pip install pymupdf4llm mammoth openpyxl
 ```
 
-Для старих `.doc` файлів також потрібен `antiword` або `libreoffice` (системний пакет).
+For legacy `.doc` files, you also need `antiword` or `libreoffice` (system package).
 
 ---
 
-## Правила (rules)
+## Rules
 
 ### `.claude/rules/babok.md`
 
-Авто-завантажується при роботі з будь-яким проектом (`projects/**`). Містить:
+Auto-loads when working with any project (`projects/**`). Contains:
 
-- **6 knowledge areas** BABOK v3 з практичними рекомендаціями
-- **Таблиця технік елісітації** -- коли яку використовувати
-- **Ієрархія типів вимог** (Wiegers): Business -> User -> Functional / NF / Constraints
-- **Чекліст якості** з прикладами поганих та гарних формулювань
-- **Тригерні слова неоднозначності** -- "fast", "easy", "flexible" тощо
-- **Конвенція ID** -- `REQ-{type}-{number}`
-- **Темплейт вимоги** та **темплейт user story**
-- **INVEST критерії**
-
----
-
-## Мова
-
-- **Розмовна мова**: Claude відповідає українською за замовчуванням
-- **Документація та вимоги**: пишуться англійською (working language для специфікацій)
-- **Заборонено**: писати будь-що російською
+- **6 BABOK v3 knowledge areas** with actionable guidance
+- **Elicitation techniques table** — when to use which
+- **Requirement types hierarchy** (Wiegers): Business → User → Functional / NF / Constraints
+- **Quality checklist** with bad/good examples
+- **Ambiguity trigger words** — "fast", "easy", "flexible", etc.
+- **ID convention** — `REQ-{type}-{number}`
+- **Requirement template** and **user story template**
+- **INVEST criteria**
 
 ---
 
-## Типовий workflow
+## Language
+
+- **Conversation**: Claude responds in Ukrainian by default (configurable in CLAUDE.md)
+- **Documentation & requirements**: written in English (working language for specs)
+- **Templates**: available in both English and Ukrainian
+
+---
+
+## Typical Workflow
 
 ```
-/scope          Визначити проект, стейкхолдерів, бізнес-цілі
-    |
-/import         Імпортувати існуючі документи (PDF, DOCX, XLSX)
-    |
-/elicit         Зібрати вимоги (інтерв'ю, аналіз документів, мітинг)
-    |
-/analyze        Декомпозиція, категоризація, пріоритизація, gap analysis
-    |
-/specify        Формальна специфікація (SRS, use cases)
-    |
-/user-story     User stories з acceptance criteria
-    |
-/validate       Quality gate -- перевірка за чеклістом Wiegers
-    |
-/glossary       Ведення глосарію (на будь-якому етапі)
+/scope          Define project, stakeholders, business objectives
+    │
+/import         Import existing documents (PDF, DOCX, XLSX)
+    │
+/elicit         Gather requirements (interview, document analysis, meeting notes)
+    │
+/analyze        Decompose, categorize, prioritize, gap analysis
+    │
+/specify        Formal specification (SRS, use cases)
+    │
+/user-story     User stories with acceptance criteria
+    │
+/validate       Quality gate — Wiegers checklist review
+    │
+/glossary       Glossary maintenance (at any stage)
 ```
 
-Скіли можна використовувати в будь-якому порядку та повторювати. Workflow ітеративний.
+Skills can be used in any order and repeated. The workflow is iterative.
 
 ---
 
-## Методологічна база
+## Methodology
 
 ### BABOK v3 (Business Analysis Body of Knowledge)
-Стандарт від IIBA (International Institute of Business Analysis). Визначає 6 knowledge areas, техніки та компетенції бізнес-аналітика.
+Standard from IIBA (International Institute of Business Analysis). Defines 6 knowledge areas, techniques, and competencies for business analysts.
 
-### Karl Wiegers -- Software Requirements
-Книги "Software Requirements" та "More About Software Requirements". Визначають:
-- Ієрархію типів вимог
-- Структуру SRS документа
-- Чекліст якості вимог
-- Процес requirements engineering
+### Karl Wiegers — Software Requirements
+From "Software Requirements" and "More About Software Requirements". Defines:
+- Requirement types hierarchy
+- SRS document structure
+- Requirements quality checklist
+- Requirements engineering process
+
+---
+
+## License
+
+MIT

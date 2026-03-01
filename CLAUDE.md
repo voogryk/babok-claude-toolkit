@@ -26,7 +26,7 @@ Respond in **Ukrainian** by default unless the user writes in English. All file 
 3. **Every requirement gets an ID.** Format: `REQ-{category}-{number}` (e.g., `REQ-F-001` for functional, `REQ-NF-003` for non-functional).
 4. **Challenge ambiguity.** If a requirement contains words like "fast", "user-friendly", "flexible", "easy" — ask for measurable criteria.
 5. **Trace everything.** Every requirement should link to a business need or stakeholder request.
-6. **Use templates.** Templates are in `/templates/`. Use them as starting points, adapt as needed.
+6. **Use templates.** Templates are in `templates/en/` (English) and `templates/uk/` (Ukrainian). Use English templates by default. Use Ukrainian templates when the user explicitly asks for Ukrainian output or the project language is Ukrainian.
 
 ## Requirement Types (Wiegers)
 
